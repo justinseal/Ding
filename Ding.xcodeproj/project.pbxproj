@@ -11,9 +11,19 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		15BDDA592E0329A600D2B2C1 /* Ding */ = {
+		15A938772E0B1D800035B812 /* Custom Views */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Custom Views";
+			sourceTree = "<group>";
+		};
+		15A9388D2E0B1D890035B812 /* Ding */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Ding;
+			sourceTree = "<group>";
+		};
+		15A938952E0B1E050035B812 /* ViewModels */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -32,7 +42,9 @@
 		15BDDA4E2E0329A600D2B2C1 = {
 			isa = PBXGroup;
 			children = (
-				15BDDA592E0329A600D2B2C1 /* Ding */,
+				15A9388D2E0B1D890035B812 /* Ding */,
+				15A938772E0B1D800035B812 /* Custom Views */,
+				15A938952E0B1E050035B812 /* ViewModels */,
 				15BDDA582E0329A600D2B2C1 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -61,7 +73,9 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				15BDDA592E0329A600D2B2C1 /* Ding */,
+				15A938772E0B1D800035B812 /* Custom Views */,
+				15A9388D2E0B1D890035B812 /* Ding */,
+				15A938952E0B1E050035B812 /* ViewModels */,
 			);
 			name = Ding;
 			packageProductDependencies = (
@@ -94,6 +108,8 @@
 			);
 			mainGroup = 15BDDA4E2E0329A600D2B2C1;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 15BDDA582E0329A600D2B2C1 /* Products */;
 			projectDirPath = "";
