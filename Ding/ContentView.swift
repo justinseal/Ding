@@ -3,7 +3,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @Bindable private var model = ViewModel()
+    @StateObject private var model = ViewModel()
     
     
     var body: some View {
@@ -29,7 +29,24 @@ struct ContentView: View {
                     }
                     .pickerStyle(.wheel)
                 }
+                
+                VStack {
+                    HStack {
+                        
+                        Text("The bell will ring every \(model.selectedBellRingInterval) minutes")
+                        Stepper("Set your Bell ring interval", value: $model.selectedBellRingInterval)
+                        
+                    }
+                    .padding()
+                    Button {
+                        model.setBellTime()
+                    } label: {
+                        Label("Ring on an interval", systemImage: "arrow.trianglehead.clockwise")
+                    }
+                    .buttonStyle(.borderedProminent)
+                }
             }
+            .labelsHidden()
             .navigationTitle("Just a Bell Ring")
         }
     }

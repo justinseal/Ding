@@ -11,15 +11,15 @@ enum BellState {
     case running, stopped
 }
 
-@Observable
-final class ViewModel {
+final class ViewModel: ObservableObject {
     //MARK: Timer Variables
-    var selectedMinutes: Int = 0
-    var selectedSeconds: Int = 0
-    var secondsRemaining: Int = 0
-    var progress: CGFloat = 0.0
-    var audioPlayer: AVAudioPlayer!
-    var sounds = ["high-short",
+    @Published var selectedMinutes: Int = 0
+    @Published var selectedSeconds: Int = 0
+    @Published var secondsRemaining: Int = 0
+    @Published var progress: CGFloat = 0.0
+    @Published var selectedBellRingInterval: Int = 1
+    @Published var audioPlayer: AVAudioPlayer!
+    @Published var sounds = ["high-short",
                   "high",
                   "low-bowl",
                   "low-bowl2",
@@ -27,8 +27,8 @@ final class ViewModel {
                   "mid-bowl",
                   "mid-short",
                   "mid-short2"]
-    var selectedSound = "high"
-    var isPlaying = true
+    @Published var selectedSound = "high"
+    @Published var isPlaying = true
     
     //Timer variable specific for picking the time range
     private var totalCurrentTime: Int {
@@ -36,7 +36,7 @@ final class ViewModel {
     }
     private var timer = Timer()
     
-    var state: TimerState = .cancelled {
+    @Published var state: TimerState = .cancelled {
         didSet {
             switch state {
             case .active:
@@ -77,6 +77,19 @@ final class ViewModel {
         })
     }
     
+    func setBellTime() {
+        let date = Date()
+        let calendar = Calendar.current
+        let currentMinutes = calendar.component(.minute, from: date)
+        var ringTimeinSeconds = (selectedBellRingInterval + currentMinutes) * 60
+        
+        
+        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: { timer in
+            ringTimeinSeconds -= 1
+        })
+    }
+    
+    //MARK: Sound Player
     func playSound() {
         let soundName = selectedSound
         guard let soundFile = NSDataAsset(name: soundName) else { return }
