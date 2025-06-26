@@ -19,15 +19,8 @@ final class ViewModel: ObservableObject {
     @Published var progress: CGFloat = 0.0
     @Published var selectedBellRingInterval: Int = 1
     @Published var audioPlayer: AVAudioPlayer!
-    @Published var sounds = ["high-short",
-                  "high",
-                  "low-bowl",
-                  "low-bowl2",
-                  "metal-mid",
-                  "mid-bowl",
-                  "mid-short",
-                  "mid-short2"]
-    @Published var selectedSound = "high"
+    
+//    @Published var selectedSound = "high"
     @Published var isPlaying = true
     
     //Timer variable specific for picking the time range
@@ -51,7 +44,7 @@ final class ViewModel: ObservableObject {
                 startTimer()
                 
             case .finished:
-                playSound()
+//                playSound()
                 timer.invalidate()
                 progress = 1.0
                 secondsRemaining = 0
@@ -90,8 +83,7 @@ final class ViewModel: ObservableObject {
     }
     
     //MARK: Sound Player
-    func playSound() {
-        let soundName = selectedSound
+    func playSound(soundName: String) {
         guard let soundFile = NSDataAsset(name: soundName) else { return }
             do {
                 if isPlaying {

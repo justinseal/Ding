@@ -4,7 +4,7 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject private var model = ViewModel()
-    
+    @AppStorage("selectedSound") var selectedSound: SoundsList = .highShort
     
     var body: some View {
         NavigationView {
@@ -13,7 +13,7 @@ struct ContentView: View {
                     .resizable()
                     .scaledToFit()
                 Button {
-                    model.playSound()
+                    model.playSound(soundName: selectedSound.rawValue)
                 } label: {
                     if model.isPlaying {
                         Label("Ring me", systemImage: "bell.and.waves.left.and.right.fill")
@@ -22,13 +22,12 @@ struct ContentView: View {
                     }
                 }
                 .buttonStyle(.borderedProminent)
-                
-                Picker("Select a sound", selection: $model.selectedSound) {
-                    ForEach(model.sounds, id: \.self) { sound in
-                        Text(sound)
+                Picker("Select a sound", selection: $selectedSound) {
+                    ForEach(SoundsList.allCases, id: \.self) { sound in
+                        Text(sound.rawValue)
                     }
-                    .pickerStyle(.wheel)
                 }
+                .pickerStyle(.menu)
                 
                 VStack {
                     HStack {
