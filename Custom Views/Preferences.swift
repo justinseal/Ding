@@ -15,19 +15,27 @@ enum SoundsList: String, CaseIterable {
 
 struct Preferences: View {
     @AppStorage("selectedSound") var selectedSound: SoundsList = .highShort
+    @AppStorage("ringOnIntervial") var ringOnInterval: Bool = false
+    @AppStorage("intervialRingTime") var intervialRingTime: Int = 1
     
     @StateObject private var model = ViewModel()
     
     var body: some View {
-        List {
-            Section("General") {
-                Picker("Select a sound", selection: $selectedSound) {
-                    ForEach(SoundsList.allCases, id: \.self) { sound in
-                        Text(sound.rawValue)
+        NavigationView {
+            List {
+                Section("General") {
+                    Picker("Select a sound", selection: $selectedSound) {
+                        ForEach(SoundsList.allCases, id: \.self) { sound in
+                            Text(sound.rawValue)
+                        }
+                        .pickerStyle(.wheel)
                     }
-                    .pickerStyle(.wheel)
+                    Toggle("Ring on interval", isOn: $ringOnInterval)
+                    IncreaseTimeView()
+                        .disabled(!ringOnInterval)
                 }
             }
+            .navigationTitle("Settings")
         }
     }
 }

@@ -2,7 +2,7 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct BellRingView: View {
     @StateObject private var model = ViewModel()
     @AppStorage("selectedSound") var selectedSound: SoundsList = .highShort
     
@@ -22,35 +22,24 @@ struct ContentView: View {
                     }
                 }
                 .buttonStyle(.borderedProminent)
-                Picker("Select a sound", selection: $selectedSound) {
-                    ForEach(SoundsList.allCases, id: \.self) { sound in
-                        Text(sound.rawValue)
-                    }
-                }
-                .pickerStyle(.menu)
+                
                 
                 VStack {
-                    HStack {
-                        
-                        Text("The bell will ring every \(model.selectedBellRingInterval) minutes")
-                        Stepper("Set your Bell ring interval", value: $model.selectedBellRingInterval)
-                        
-                    }
-                    .padding()
                     Button {
                         model.setBellTime()
                     } label: {
                         Label("Ring on an interval", systemImage: "arrow.trianglehead.clockwise")
                     }
                     .buttonStyle(.borderedProminent)
+                    
                 }
+                .labelsHidden()
+                .navigationTitle("Just a Bell Ring")
             }
-            .labelsHidden()
-            .navigationTitle("Just a Bell Ring")
         }
     }
 }
 
 #Preview {
-    ContentView()
+    BellRingView()
 }

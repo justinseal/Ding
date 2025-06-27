@@ -17,7 +17,7 @@ final class ViewModel: ObservableObject {
     @Published var selectedSeconds: Int = 0
     @Published var secondsRemaining: Int = 0
     @Published var progress: CGFloat = 0.0
-    @Published var selectedBellRingInterval: Int = 1
+    @AppStorage("intervialRingTime") var intervialRingTime: Int = 1
     @Published var audioPlayer: AVAudioPlayer!
     
 //    @Published var selectedSound = "high"
@@ -74,7 +74,7 @@ final class ViewModel: ObservableObject {
         let date = Date()
         let calendar = Calendar.current
         let currentMinutes = calendar.component(.minute, from: date)
-        var ringTimeinSeconds = (selectedBellRingInterval + currentMinutes) * 60
+        var ringTimeinSeconds = (intervialRingTime + currentMinutes) * 60
         
         
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: { timer in

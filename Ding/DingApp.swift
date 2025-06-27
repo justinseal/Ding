@@ -6,7 +6,7 @@ import SwiftUI
 struct DingApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            AppTabView()
         }
     }
 }
