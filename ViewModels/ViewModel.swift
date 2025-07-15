@@ -8,18 +8,19 @@ enum TimerState {
 }
 
 enum BellState {
-    case running, stopped
+    case running, stopped, repeating
 }
 
 final class ViewModel: ObservableObject {
     //MARK: Timer Variables
     @Published var selectedMinutes: Int = 0
     @Published var selectedSeconds: Int = 0
-    @Published var secondsRemaining: Int = 0
+    @Published var secondsRemaining: Int = 1
     @Published var progress: CGFloat = 0.0
     @AppStorage("intervialRingTime") var intervialRingTime: Int = 1
+    @AppStorage("randomInterval") var randomInterval: Bool = false
+    @AppStorage("selectedSound") var selectedSound: SoundsList = .highShort
     @Published var audioPlayer: AVAudioPlayer!
-    
 //    @Published var selectedSound = "high"
     @Published var isPlaying = true
     
@@ -29,58 +30,66 @@ final class ViewModel: ObservableObject {
     }
     private var timer = Timer()
     
-    @Published var state: TimerState = .cancelled {
+    var randomIntervalSeconds: Int?
+    
+    @Published var state: BellState = .stopped {
         didSet {
             switch state {
-            case .active:
+            case .running:
                 startTimer()
-                secondsRemaining = totalCurrentTime
-                progress = 1.0
             
-            case .paused:
+            case .stopped:
                 timer.invalidate()
-            
-            case .resumed:
-                startTimer()
-                
-            case .finished:
-//                playSound()
-                timer.invalidate()
-                progress = 1.0
                 secondsRemaining = 0
                 
-            case .cancelled:
-                timer.invalidate()
-                secondsRemaining = 0
-                progress = 1.0
+            case .repeating:
+                randomBellTimer()
             }
         }
     }
-    
+    //MARK: Timer Ranges
+    //TODO: Make a timer selector
     let hoursRange = 0...23
     let minutesRange = 0...59
     let secondsRange = 0...59
     
     //MARK: Timer Functions
-    private func startTimer() {
-        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: { timer in
+    func startTimer() {
+        
+        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
             self.secondsRemaining -= 1
-            self.progress = CGFloat(self.secondsRemaining) / CGFloat(self.totalCurrentTime)
             
-        })
+            if self.secondsRemaining <= 0 && self.state == .repeating {
+                self.playSound(soundName: self.selectedSound.rawValue)
+                self.updateRemaningSeconds()
+                
+            } else if self.secondsRemaining <= 0 {
+                self.playSound(soundName: self.selectedSound.rawValue)
+            }
+        }
     }
     
-    func setBellTime() {
-        let date = Date()
-        let calendar = Calendar.current
-        let currentMinutes = calendar.component(.minute, from: date)
-        var ringTimeinSeconds = (intervialRingTime + currentMinutes) * 60
-        
-        
-        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: { timer in
-            ringTimeinSeconds -= 1
-        })
+    func changeCircleProgress(for secondsRemaining: Int, totalCurrentTime: Int) -> CGFloat {
+        progress = CGFloat(secondsRemaining) / CGFloat(totalCurrentTime)
+        return progress
     }
+    
+    func createRandomIncrement() {
+        randomIntervalSeconds = Int.random(in: 1...intervialRingTime)
+        
+    }
+    
+    func updateRemaningSeconds() {
+        createRandomIncrement()
+        secondsRemaining = ((randomIntervalSeconds ?? 0 + intervialRingTime) * 60)
+        print ("\(randomIntervalSeconds ?? 0)")
+    }
+    
+    func randomBellTimer() {
+        updateRemaningSeconds()
+        startTimer()
+    }
+    
     
     //MARK: Sound Player
     func playSound(soundName: String) {
