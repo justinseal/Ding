@@ -9,12 +9,21 @@ struct BellRingView: View {
     @AppStorage("randomInterval") var randomInterval: Bool = false
     @AppStorage("ringOnIntervial") var ringOnInterval: Bool = false
     
+
+    
     var body: some View {
         NavigationView {
             VStack {
-                Image("New Lotus")
-                    .resizable()
-                    .scaledToFit()
+                ZStack {
+                    //TODO: Make large text to help user know when/if the bell will ring
+                    Image("New Lotus")
+                        .resizable()
+                        .scaledToFit()
+                    Text("text")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                        
+                }
                 Button {
                     model.playSound(soundName: selectedSound.rawValue)
                 } label: {
@@ -28,20 +37,33 @@ struct BellRingView: View {
                 
                 
                 VStack {
-                    Text("\(model.secondsRemaining) Seconds")
-                    Button {
-                        if model.state == .stopped && randomInterval == true {
-                            model.state = .repeating
-                        } else {
-                            model.state = .stopped
+                    HStack {
+                        Button {
+                            model.playSound(soundName: selectedSound.rawValue)
+                            if model.state == .stopped {
+                                model.state = .repeating
+                            } else {
+                                model.state = .stopped
+                            }
+                        } label: {
+                            Label("Random interval", systemImage: "shuffle.circle")
                         }
-                    } label: {
-                        Label("Ring on an interval", systemImage: "arrow.trianglehead.clockwise")
+                        .buttonStyle(.borderedProminent)
+                        .disabled(!ringOnInterval)
+                        
+                        Button {
+                            if model.state == .stopped {
+                                model.state = .running
+                            } else {
+                                model.state = .stopped
+                            }
+                        } label: {
+                            Label("Regular inverval", systemImage: "arrow.trianglehead.clockwise")
+                        }
+                        .buttonStyle(.borderedProminent)
                     }
-                    .buttonStyle(.borderedProminent)
+                    
                 }
-                .disabled(!ringOnInterval)
-                .labelsHidden()
                 .navigationTitle("Just a Bell Ring")
             }
         }

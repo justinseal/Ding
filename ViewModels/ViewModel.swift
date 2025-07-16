@@ -59,19 +59,24 @@ final class ViewModel: ObservableObject {
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
             self.secondsRemaining -= 1
             
-            if self.secondsRemaining <= 0 && self.state == .repeating {
+            if self.secondsRemaining == 0 {
                 self.playSound(soundName: self.selectedSound.rawValue)
-                self.updateRemaningSeconds()
-                
-            } else if self.secondsRemaining <= 0 {
-                self.playSound(soundName: self.selectedSound.rawValue)
+                self.timer.invalidate()
             }
+            
         }
     }
     
-    func changeCircleProgress(for secondsRemaining: Int, totalCurrentTime: Int) -> CGFloat {
-        progress = CGFloat(secondsRemaining) / CGFloat(totalCurrentTime)
-        return progress
+    func startRandomTimer() {
+        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
+            self.secondsRemaining -= 1
+            
+            if self.secondsRemaining <= 0 {
+                self.timer.invalidate()
+                self.playSound(soundName: self.selectedSound.rawValue)
+                self.randomBellTimer()
+            }
+        }
     }
     
     func createRandomIncrement() {
@@ -87,9 +92,13 @@ final class ViewModel: ObservableObject {
     
     func randomBellTimer() {
         updateRemaningSeconds()
-        startTimer()
+        startRandomTimer()
     }
     
+    func changeCircleProgress(for secondsRemaining: Int, totalCurrentTime: Int) -> CGFloat {
+        progress = CGFloat(secondsRemaining) / CGFloat(totalCurrentTime)
+        return progress
+    }
     
     //MARK: Sound Player
     func playSound(soundName: String) {
