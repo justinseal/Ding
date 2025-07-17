@@ -9,6 +9,10 @@ struct AppTabView: View {
             Tab("Bell", systemImage: "bell.fill") {
                 BellRingView()
             }
+            Tab("Meditation", systemImage: "timer.circle.fill") {
+                TimerView()
+            }
+            
             Tab("Settings", systemImage: "gear") {
                 Preferences()
             }

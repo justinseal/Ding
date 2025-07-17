@@ -11,11 +11,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		15A938772E0B1D800035B812 /* Custom Views */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "Custom Views";
-			sourceTree = "<group>";
-		};
 		15A9388D2E0B1D890035B812 /* Ding */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Ding;
@@ -43,7 +38,6 @@
 			isa = PBXGroup;
 			children = (
 				15A9388D2E0B1D890035B812 /* Ding */,
-				15A938772E0B1D800035B812 /* Custom Views */,
 				15A938952E0B1E050035B812 /* ViewModels */,
 				15BDDA582E0329A600D2B2C1 /* Products */,
 			);
@@ -73,7 +67,6 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				15A938772E0B1D800035B812 /* Custom Views */,
 				15A9388D2E0B1D890035B812 /* Ding */,
 				15A938952E0B1E050035B812 /* ViewModels */,
 			);

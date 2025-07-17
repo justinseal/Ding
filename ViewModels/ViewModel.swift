@@ -16,7 +16,7 @@ final class ViewModel: ObservableObject {
     @Published var selectedMinutes: Int = 0
     @Published var selectedSeconds: Int = 0
     @Published var secondsRemaining: Int = 1
-    @Published var progress: CGFloat = 0.0
+    @Published var progress: CGFloat = 1.0
     @AppStorage("intervialRingTime") var intervialRingTime: Int = 1
     @AppStorage("randomInterval") var randomInterval: Bool = false
     @AppStorage("selectedSound") var selectedSound: SoundsList = .highShort
@@ -25,7 +25,7 @@ final class ViewModel: ObservableObject {
     @Published var isPlaying = true
     
     //Timer variable specific for picking the time range
-    private var totalCurrentTime: Int {
+    private var totalTimeForSelection: Int {
         (selectedMinutes * 60) + selectedSeconds
     }
     private var timer = Timer()
@@ -36,7 +36,7 @@ final class ViewModel: ObservableObject {
         didSet {
             switch state {
             case .running:
-                startTimer()
+                startBellTimer()
             
             case .stopped:
                 timer.invalidate()
@@ -53,7 +53,7 @@ final class ViewModel: ObservableObject {
     let secondsRange = 0...59
     
     //MARK: Timer Functions
-    func startTimer() {
+    func startBellTimer() {
         updateRemaningSeconds()
         
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
@@ -79,6 +79,21 @@ final class ViewModel: ObservableObject {
         }
     }
     
+    func startMeditationTimer() {
+        secondsRemaining = totalTimeForSelection
+        
+        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
+            self.secondsRemaining -= 1
+            self.progress = CGFloat(self.secondsRemaining) / CGFloat(self.totalTimeForSelection)
+            
+            if self.secondsRemaining == 0 {
+                self.playSound(soundName: self.selectedSound.rawValue)
+                self.timer.invalidate()
+            }
+            
+        }
+    }
+    
     func createRandomIncrement() {
         randomIntervalSeconds = Int.random(in: 1...intervialRingTime)
         secondsRemaining = ((randomIntervalSeconds ?? 0 + intervialRingTime) * 60)
@@ -93,10 +108,6 @@ final class ViewModel: ObservableObject {
         startRandomTimer()
     }
     
-    func changeCircleProgress(for secondsRemaining: Int, totalCurrentTime: Int) -> CGFloat {
-        progress = CGFloat(secondsRemaining) / CGFloat(totalCurrentTime)
-        return progress
-    }
     
     //MARK: Sound Player
     func playSound(soundName: String) {
