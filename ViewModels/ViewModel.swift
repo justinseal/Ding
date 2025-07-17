@@ -87,7 +87,6 @@ final class ViewModel: ObservableObject {
     func updateRemaningSeconds() {
         createRandomIncrement()
         secondsRemaining = ((randomIntervalSeconds ?? 0 + intervialRingTime) * 60)
-        print ("\(randomIntervalSeconds ?? 0)")
     }
     
     func randomBellTimer() {

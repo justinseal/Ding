@@ -9,21 +9,20 @@ struct BellRingView: View {
     @AppStorage("randomInterval") var randomInterval: Bool = false
     @AppStorage("ringOnIntervial") var ringOnInterval: Bool = false
     
-
+    @State private var readableTime: String = ""
     
     var body: some View {
         NavigationView {
             VStack {
-                ZStack {
-                    //TODO: Make large text to help user know when/if the bell will ring
-                    Image("New Lotus")
-                        .resizable()
-                        .scaledToFit()
-                    Text("text")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        
+                VStack {
+                    Text("The Bell will ring in:")
+                    Text(model.secondsRemaining.asTimeStamp)
                 }
+                    .font(.title)
+                    .fontWeight(.bold)
+                Image("New Lotus")
+                    .resizable()
+                    .scaledToFit()
                 Button {
                     model.playSound(soundName: selectedSound.rawValue)
                 } label: {
@@ -72,6 +71,11 @@ struct BellRingView: View {
                 model.updateRemaningSeconds()
             }
         }
+    }
+    
+    func makeTimeReadable() {
+        readableTime = String(model.secondsRemaining)
+            
     }
 }
 
