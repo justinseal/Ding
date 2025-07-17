@@ -9,8 +9,6 @@ struct BellRingView: View {
     @AppStorage("randomInterval") var randomInterval: Bool = false
     @AppStorage("ringOnIntervial") var ringOnInterval: Bool = false
     
-    @State private var readableTime: String = ""
-    
     var body: some View {
         NavigationView {
             VStack {
@@ -51,6 +49,7 @@ struct BellRingView: View {
                         .disabled(!ringOnInterval)
                         
                         Button {
+                            model.playSound(soundName: selectedSound.rawValue)
                             if model.state == .stopped {
                                 model.state = .running
                             } else {
@@ -71,11 +70,6 @@ struct BellRingView: View {
                 model.updateRemaningSeconds()
             }
         }
-    }
-    
-    func makeTimeReadable() {
-        readableTime = String(model.secondsRemaining)
-            
     }
 }
 

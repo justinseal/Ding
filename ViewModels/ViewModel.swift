@@ -40,7 +40,6 @@ final class ViewModel: ObservableObject {
             
             case .stopped:
                 timer.invalidate()
-                secondsRemaining = 0
                 
             case .repeating:
                 randomBellTimer()
@@ -55,6 +54,7 @@ final class ViewModel: ObservableObject {
     
     //MARK: Timer Functions
     func startTimer() {
+        updateRemaningSeconds()
         
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
             self.secondsRemaining -= 1
@@ -81,16 +81,15 @@ final class ViewModel: ObservableObject {
     
     func createRandomIncrement() {
         randomIntervalSeconds = Int.random(in: 1...intervialRingTime)
-        
-    }
-    
-    func updateRemaningSeconds() {
-        createRandomIncrement()
         secondsRemaining = ((randomIntervalSeconds ?? 0 + intervialRingTime) * 60)
     }
     
+    func updateRemaningSeconds() {
+        secondsRemaining = intervialRingTime * 60
+    }
+    
     func randomBellTimer() {
-        updateRemaningSeconds()
+        createRandomIncrement()
         startRandomTimer()
     }
     
