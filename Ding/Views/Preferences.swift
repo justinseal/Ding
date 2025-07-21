@@ -19,7 +19,7 @@ struct Preferences: View {
     @AppStorage("randomInterval") var randomInterval: Bool = false
     @AppStorage("intervialRingTime") var intervialRingTime: Int = 5
     
-    @StateObject private var model = ViewModel()
+    @StateObject private var model = BellRingViewModel()
     
     var body: some View {
         NavigationView {

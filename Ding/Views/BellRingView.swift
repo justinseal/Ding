@@ -3,7 +3,7 @@
 import SwiftUI
 
 struct BellRingView: View {
-    @StateObject private var model = ViewModel()
+    @StateObject private var model = BellRingViewModel()
     @AppStorage("selectedSound") var selectedSound: SoundsList = .highShort
     @AppStorage("intervialRingTime") var intervialRingTime: Int = 5
     @AppStorage("randomInterval") var randomInterval: Bool = false

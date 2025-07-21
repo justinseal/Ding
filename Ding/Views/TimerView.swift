@@ -3,14 +3,15 @@
 import SwiftUI
 
 struct TimerView: View {
-    @StateObject private var model = ViewModel()
+    @StateObject private var model = TimerViewModel()
     
     var body: some View {
-        //TODO: Fix this view to not mess with the top
         VStack {
-            
-            progressView
-            timerPickerControll
+            if model.state == .cancelled {
+                timerPickerControll
+            } else {
+                progressView
+            }
             timerButtons
         }
         .frame(maxWidth: .infinity, maxHeight: 300)
@@ -37,16 +38,30 @@ struct TimerView: View {
     var timerButtons: some View {
         HStack {
             Button("Stop") {
-                //TODO: insert button action
+                model.state = .cancelled
             }
             .buttonStyle(StopButtonStyle())
             Spacer()
             
-            Button("Start") {
-                //TODO: insert button action
-                model.startMeditationTimer()
+            switch model.state {
+            case .cancelled, .finished:
+                Button("Start") {
+                    model.state = .active
+                }
+                .buttonStyle(StartButtonStyle())
+                
+            case .active, .resumed:
+                Button("Pause") {
+                    model.state = .paused
+                }
+                .buttonStyle(StartButtonStyle())
+                
+                case .paused:
+                Button("Resume") {
+                    model.state = .resumed
+                }
+                .buttonStyle(StartButtonStyle())
             }
-            .buttonStyle(StartButtonStyle())
         }
         .padding(.all, 32)
     }

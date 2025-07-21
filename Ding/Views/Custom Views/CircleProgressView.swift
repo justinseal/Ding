@@ -3,7 +3,7 @@
 import SwiftUI
 
 struct CircleProgressView: View {
-    let model: ViewModel
+    let model: TimerViewModel
     var lineWidth: CGFloat = 15
     @State private var chosenTime = Date.now
     
@@ -33,5 +33,5 @@ struct CircleProgressView: View {
 }
 
 #Preview {
-    CircleProgressView(model: ViewModel.init())
+    CircleProgressView(model: TimerViewModel.init())
 }

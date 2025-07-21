@@ -3,15 +3,13 @@
 import SwiftUI
 import AVKit
 
-enum TimerState {
-    case active, paused, resumed, cancelled, finished
-}
+
 
 enum BellState {
     case running, stopped, repeating
 }
 
-final class ViewModel: ObservableObject {
+final class BellRingViewModel: ObservableObject {
     //MARK: Timer Variables
     @Published var selectedMinutes: Int = 0
     @Published var selectedSeconds: Int = 0
@@ -48,9 +46,7 @@ final class ViewModel: ObservableObject {
     }
     //MARK: Timer Ranges
     //TODO: Make a timer selector
-    let hoursRange = 0...23
-    let minutesRange = 0...59
-    let secondsRange = 0...59
+    
     
     //MARK: Timer Functions
     func startBellTimer() {
@@ -79,20 +75,7 @@ final class ViewModel: ObservableObject {
         }
     }
     
-    func startMeditationTimer() {
-        secondsRemaining = totalTimeForSelection
-        
-        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
-            self.secondsRemaining -= 1
-            self.progress = CGFloat(self.secondsRemaining) / CGFloat(self.totalTimeForSelection)
-            
-            if self.secondsRemaining == 0 {
-                self.playSound(soundName: self.selectedSound.rawValue)
-                self.timer.invalidate()
-            }
-            
-        }
-    }
+    
     
     func createRandomIncrement() {
         randomIntervalSeconds = Int.random(in: 1...intervialRingTime)
