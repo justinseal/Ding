@@ -3,9 +3,8 @@
 import SwiftUI
 
 struct CircleProgressView: View {
-    let model: TimerViewModel
+    @StateObject var model: TimerViewModel
     var lineWidth: CGFloat = 15
-    @State private var chosenTime = Date.now
     
     var body: some View {
         ZStack {
@@ -20,7 +19,7 @@ struct CircleProgressView: View {
                 .trim(from: 0, to: model.progress)
                 .stroke(.black, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
                 .rotationEffect(.degrees(-90))
-                .animation(.linear, value: model.progress)
+                .animation(.linear(duration: 1), value: model.secondsRemaining)
             
             Text(model.secondsRemaining.asTimeStamp)
                 .font(.largeTitle)
@@ -28,7 +27,6 @@ struct CircleProgressView: View {
             
         }
         .frame(width: 350, height: 350)
-        .animation(.linear(duration: 1.0), value: model.progress)
     }
 }
 

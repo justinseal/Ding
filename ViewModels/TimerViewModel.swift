@@ -9,9 +9,8 @@ enum TimerState {
 
 final class TimerViewModel: ObservableObject {
     @AppStorage("selectedSound") var selectedSound: SoundsList = .highShort
-    
     @Published var secondsRemaining: Int = 0
-    @Published var progress: CGFloat = 0
+    @Published var progress: CGFloat = 1.0
     
     @Published var isPlaying = true
     @Published var selectedMinutes: Int = 0
@@ -26,9 +25,8 @@ final class TimerViewModel: ObservableObject {
         didSet {
             switch state {
                 case .active:
-                startMeditationTimer()
-                secondsRemaining = totalTimeForSelection
                 progress = 1.0
+                startMeditationTimer()
                 
             case .paused:
                 timer.invalidate()
@@ -38,20 +36,17 @@ final class TimerViewModel: ObservableObject {
                 
             case .cancelled:
                 timer.invalidate()
-                secondsRemaining = 0
                 progress = 1.0
                 
             case .finished:
                 playSound(soundName: selectedSound.rawValue)
                 timer.invalidate()
                 progress = 1.0
-                secondsRemaining = 0
-                
             }
         }
     }
     
-    private var totalTimeForSelection: Int {
+    var totalTimeForSelection: Int {
         (selectedMinutes * 60) + selectedSeconds
     }
     
@@ -60,16 +55,19 @@ final class TimerViewModel: ObservableObject {
     func startMeditationTimer() {
         secondsRemaining = totalTimeForSelection
         
-        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
-            self.secondsRemaining -= 1
-            self.progress = CGFloat(self.secondsRemaining) / CGFloat(self.totalTimeForSelection)
-            
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
             if self.secondsRemaining == 0 {
-                self.playSound(soundName: self.selectedSound.rawValue)
-                self.timer.invalidate()
+                self.state = .finished
+            } else {
+                self.secondsRemaining -= 1
+                self.updateProgress()
             }
             
         }
+    }
+    
+    func updateProgress() {
+        progress = CGFloat(secondsRemaining) / CGFloat(totalTimeForSelection)
     }
     
     //MARK: Sound Player
