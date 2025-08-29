@@ -15,12 +15,14 @@ final class BellRingViewModel: ObservableObject {
     @Published var selectedSeconds: Int = 0
     @Published var secondsRemaining: Int = 1
     @Published var progress: CGFloat = 1.0
+    
+    @Published var soundModel = SoundPlayerViewModel()
+    
     @AppStorage("intervialRingTime") var intervialRingTime: Int = 1
     @AppStorage("randomInterval") var randomInterval: Bool = false
     @AppStorage("selectedSound") var selectedSound: SoundsList = .highShort
-    @Published var audioPlayer: AVAudioPlayer!
-//    @Published var selectedSound = "high"
-    @Published var isPlaying = true
+
+    
     
     //Timer variable specific for picking the time range
     private var totalTimeForSelection: Int {
@@ -56,7 +58,7 @@ final class BellRingViewModel: ObservableObject {
             self.secondsRemaining -= 1
             
             if self.secondsRemaining == 0 {
-                self.playSound(soundName: self.selectedSound.rawValue)
+                self.soundModel.playSound(soundName: self.selectedSound.rawValue)
                 self.timer.invalidate()
             }
             
@@ -69,7 +71,7 @@ final class BellRingViewModel: ObservableObject {
             
             if self.secondsRemaining <= 0 {
                 self.timer.invalidate()
-                self.playSound(soundName: self.selectedSound.rawValue)
+                self.soundModel.playSound(soundName: self.selectedSound.rawValue)
                 self.randomBellTimer()
             }
         }
@@ -90,24 +92,4 @@ final class BellRingViewModel: ObservableObject {
         createRandomIncrement()
         startRandomTimer()
     }
-    
-    
-    //MARK: Sound Player
-    func playSound(soundName: String) {
-        guard let soundFile = NSDataAsset(name: soundName) else { return }
-            do {
-                if isPlaying {
-                    audioPlayer = try AVAudioPlayer(data: soundFile.data)
-                    isPlaying.toggle()
-                    audioPlayer.play()
-                } else {
-                    audioPlayer.stop()
-                    isPlaying.toggle()
-                }
-            } catch {
-                print("😡 Error playing sound \(error.localizedDescription)")
-            }
-        }
-    
-    
 }

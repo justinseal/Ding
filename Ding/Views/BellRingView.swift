@@ -4,6 +4,7 @@ import SwiftUI
 
 struct BellRingView: View {
     @StateObject private var model = BellRingViewModel()
+    @StateObject private var soundModel = SoundPlayerViewModel()
     @AppStorage("selectedSound") var selectedSound: SoundsList = .highShort
     @AppStorage("intervialRingTime") var intervialRingTime: Int = 5
     @AppStorage("randomInterval") var randomInterval: Bool = false
@@ -22,9 +23,9 @@ struct BellRingView: View {
                     .resizable()
                     .scaledToFit()
                 Button {
-                    model.playSound(soundName: selectedSound.rawValue)
+                    soundModel.playSound(soundName: selectedSound.rawValue)
                 } label: {
-                    if model.isPlaying {
+                    if soundModel.isPlaying {
                         Label("Ring me", systemImage: "bell.and.waves.left.and.right.fill")
                     } else {
                         Label("Stop", systemImage: "stop.circle.fill")
@@ -36,7 +37,7 @@ struct BellRingView: View {
                 VStack {
                     HStack {
                         Button {
-                            model.playSound(soundName: selectedSound.rawValue)
+                            soundModel.playSound(soundName: selectedSound.rawValue)
                             if model.state == .stopped {
                                 model.state = .repeating
                             } else {
@@ -49,7 +50,7 @@ struct BellRingView: View {
                         .disabled(!ringOnInterval)
                         
                         Button {
-                            model.playSound(soundName: selectedSound.rawValue)
+                            soundModel.playSound(soundName: selectedSound.rawValue)
                             if model.state == .stopped {
                                 model.state = .running
                             } else {

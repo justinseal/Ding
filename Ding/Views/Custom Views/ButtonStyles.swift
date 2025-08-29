@@ -33,3 +33,19 @@ struct StopButtonStyle: ButtonStyle {
             )
     }
 }
+
+struct ResetButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .frame(width: 70, height: 70)
+            .foregroundColor(.orange)
+            .background(.orange).opacity(0.4)
+            .clipShape(Circle())
+            .padding(.all, 3)
+            .overlay(
+                Circle()
+                    .stroke((Color.orange)
+                    .opacity(0.3), lineWidth: 2)
+            )
+    }
+}

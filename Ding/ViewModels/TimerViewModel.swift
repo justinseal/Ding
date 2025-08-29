@@ -9,13 +9,16 @@ enum TimerState {
 
 final class TimerViewModel: ObservableObject {
     @AppStorage("selectedSound") var selectedSound: SoundsList = .highShort
+    @AppStorage("selectedSeconds") var selectedSeconds: Int = 0
+    @AppStorage("selectedMinutes") var selectedMinutes: Int = 0
+    @AppStorage("selectedHours") var selectedHours: Int = 0
+    
     @Published var secondsRemaining: Int = 0
     @Published var progress: CGFloat = 1.0
     
-    @Published var isPlaying = true
-    @Published var selectedMinutes: Int = 0
-    @Published var selectedSeconds: Int = 0
-    @Published var audioPlayer: AVAudioPlayer!
+//    @Published var selectedMinutes: Int = 0
+//    @Published var selectedSeconds: Int = 0
+    @Published var soundmodel = SoundPlayerViewModel()
     
     let hoursRange = 0...23
     let minutesRange = 0...59
@@ -39,7 +42,7 @@ final class TimerViewModel: ObservableObject {
                 progress = 1.0
                 
             case .finished:
-                playSound(soundName: selectedSound.rawValue)
+                soundmodel.playSound(soundName: selectedSound.rawValue)
                 timer.invalidate()
                 progress = 1.0
             }
@@ -47,7 +50,7 @@ final class TimerViewModel: ObservableObject {
     }
     
     var totalTimeForSelection: Int {
-        (selectedMinutes * 60) + selectedSeconds
+        (selectedHours * 3600) + (selectedMinutes * 60) + selectedSeconds
     }
     
     private var timer = Timer()
@@ -70,20 +73,11 @@ final class TimerViewModel: ObservableObject {
         progress = CGFloat(secondsRemaining) / CGFloat(totalTimeForSelection)
     }
     
-    //MARK: Sound Player
-    func playSound(soundName: String) {
-        guard let soundFile = NSDataAsset(name: soundName) else { return }
-            do {
-                if isPlaying {
-                    audioPlayer = try AVAudioPlayer(data: soundFile.data)
-                    isPlaying.toggle()
-                    audioPlayer.play()
-                } else {
-                    audioPlayer.stop()
-                    isPlaying.toggle()
-                }
-            } catch {
-                print("😡 Error playing sound \(error.localizedDescription)")
-            }
-        }
+    func resetTimes() {
+        
+        selectedHours = 0
+        selectedMinutes = 0
+        selectedSeconds = 0
+    }
+ 
 }

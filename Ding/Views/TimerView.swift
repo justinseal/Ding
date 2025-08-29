@@ -3,6 +3,9 @@
 import SwiftUI
 
 struct TimerView: View {
+    @AppStorage("selectedSeconds") var storedSeconds: Int = 0
+    @AppStorage("selectedMinutes") var storedMinutes: Int = 0
+    
     @StateObject private var model = TimerViewModel()
     
     var body: some View {
@@ -28,11 +31,13 @@ struct TimerView: View {
         
     var timerPickerControll: some View {
         HStack {
+            TimePickerView(title: "hour", range: model.hoursRange, binding: $model.selectedHours)
             TimePickerView(title: "min", range: model.minutesRange, binding: $model.selectedMinutes)
             TimePickerView(title: "sec", range: model.secondsRange, binding: $model.selectedSeconds)
         }
         .frame(width: 360, height: 255)
         .padding(.all, 32)
+        
     }
     
     var timerButtons: some View {
@@ -41,6 +46,14 @@ struct TimerView: View {
                 model.state = .cancelled
             }
             .buttonStyle(StopButtonStyle())
+            Spacer()
+            
+            Button("Reset") {
+                withAnimation(.linear(duration: 0.3)) {
+                    model.resetTimes()
+                }
+            }
+            .buttonStyle(ResetButtonStyle())
             Spacer()
             
             switch model.state {

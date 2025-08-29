@@ -20,6 +20,7 @@ struct Preferences: View {
     @AppStorage("intervialRingTime") var intervialRingTime: Int = 5
     
     @StateObject private var model = BellRingViewModel()
+    @StateObject private var soundModel = SoundPlayerViewModel()
     
     var body: some View {
         NavigationView {
@@ -29,7 +30,10 @@ struct Preferences: View {
                         ForEach(SoundsList.allCases, id: \.self) { sound in
                             Text(sound.rawValue)
                         }
-                        .pickerStyle(.wheel)
+                    }
+                    .pickerStyle(.menu)
+                    .onChange(of: selectedSound) {
+                        soundModel.playSound(soundName: selectedSound.rawValue)
                     }
                     Toggle("Ring on interval", isOn: $ringOnInterval)
                 }

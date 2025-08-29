@@ -16,11 +16,6 @@
 			path = Ding;
 			sourceTree = "<group>";
 		};
-		15A938952E0B1E050035B812 /* ViewModels */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = ViewModels;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -38,7 +33,6 @@
 			isa = PBXGroup;
 			children = (
 				15A9388D2E0B1D890035B812 /* Ding */,
-				15A938952E0B1E050035B812 /* ViewModels */,
 				15BDDA582E0329A600D2B2C1 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -68,7 +62,6 @@
 			);
 			fileSystemSynchronizedGroups = (
 				15A9388D2E0B1D890035B812 /* Ding */,
-				15A938952E0B1E050035B812 /* ViewModels */,
 			);
 			name = Ding;
 			packageProductDependencies = (
