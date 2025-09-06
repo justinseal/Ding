@@ -17,6 +17,7 @@ struct Preferences: View {
     @AppStorage("selectedSound") var selectedSound: SoundsList = .highShort
     @AppStorage("ringOnIntervial") var ringOnInterval: Bool = false
     @AppStorage("randomInterval") var randomInterval: Bool = false
+    @AppStorage("ringAtStart") var ringAtStart: Bool = false
     @AppStorage("intervialRingTime") var intervialRingTime: Int = 5
     
     @StateObject private var model = BellRingViewModel()
@@ -34,8 +35,14 @@ struct Preferences: View {
                     .pickerStyle(.menu)
                     .onChange(of: selectedSound) {
                         soundModel.playSound(soundName: selectedSound.rawValue)
+                        
                     }
+                    .accessibilityLabel("Bell Selection")
+                    .accessibilityHint("Use this to select different bell rings for your meditation or mindful bell rings.")
+                    Toggle("Ring at start of session", isOn: $ringAtStart)
+                        .accessibilityHint("Use this toggle to ring the bell at the start of any meditation session.")
                     Toggle("Ring on interval", isOn: $ringOnInterval)
+                        .accessibilityHint("Use this toggle to ring your mindfulness bell on regular intervalas that you can select below.")
                 }
                 Section("Interval Selections") {
                     IncreaseTimeView()

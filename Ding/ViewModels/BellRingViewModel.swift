@@ -13,11 +13,12 @@ final class BellRingViewModel: ObservableObject {
     //MARK: Timer Variables
     @Published var selectedMinutes: Int = 0
     @Published var selectedSeconds: Int = 0
-    @Published var secondsRemaining: Int = 1
     @Published var progress: CGFloat = 1.0
     
     @Published var soundModel = SoundPlayerViewModel()
     
+    @AppStorage("bellSecondsRemaining") var secondsRemaining: Int = 1
+    @AppStorage("ringAtStart") var ringAtStart: Bool = false
     @AppStorage("intervialRingTime") var intervialRingTime: Int = 1
     @AppStorage("randomInterval") var randomInterval: Bool = false
     @AppStorage("selectedSound") var selectedSound: SoundsList = .highShort
@@ -36,12 +37,18 @@ final class BellRingViewModel: ObservableObject {
         didSet {
             switch state {
             case .running:
+                if ringAtStart {
+                    soundModel.playSound(soundName: selectedSound.rawValue)
+                }
                 startBellTimer()
             
             case .stopped:
                 timer.invalidate()
                 
             case .repeating:
+                if ringAtStart {
+                    soundModel.playSound(soundName: selectedSound.rawValue)
+                }
                 randomBellTimer()
             }
         }
@@ -56,9 +63,7 @@ final class BellRingViewModel: ObservableObject {
         
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
             self.secondsRemaining -= 1
-            
             if self.secondsRemaining == 0 {
-                self.soundModel.playSound(soundName: self.selectedSound.rawValue)
                 self.timer.invalidate()
             }
             
@@ -71,7 +76,6 @@ final class BellRingViewModel: ObservableObject {
             
             if self.secondsRemaining <= 0 {
                 self.timer.invalidate()
-                self.soundModel.playSound(soundName: self.selectedSound.rawValue)
                 self.randomBellTimer()
             }
         }

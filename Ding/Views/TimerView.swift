@@ -10,6 +10,7 @@ struct TimerView: View {
     
     var body: some View {
         VStack {
+            
             if model.state == .cancelled {
                 timerPickerControll
             } else {
@@ -26,7 +27,7 @@ struct TimerView: View {
             CircleProgressView(model: model)
         }
         .frame(width: 360, height: 250)
-        .padding(.top, 80)
+        .padding(.bottom, 80)
     }
         
     var timerPickerControll: some View {
@@ -36,7 +37,7 @@ struct TimerView: View {
             TimePickerView(title: "sec", range: model.secondsRange, binding: $model.selectedSeconds)
         }
         .frame(width: 360, height: 255)
-        .padding(.all, 32)
+        .padding(.top, 32)
         
     }
     

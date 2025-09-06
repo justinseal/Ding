@@ -32,12 +32,14 @@ struct BellRingView: View {
                     }
                 }
                 .buttonStyle(.borderedProminent)
+                .accessibilityLabel("Ring a bell")
+                .accessibilityHint("Press this button to simply ring your chosen bell.")
                 
                 
                 VStack {
                     HStack {
                         Button {
-                            soundModel.playSound(soundName: selectedSound.rawValue)
+//                            soundModel.playSound(soundName: selectedSound.rawValue)
                             if model.state == .stopped {
                                 model.state = .repeating
                             } else {
@@ -48,6 +50,8 @@ struct BellRingView: View {
                         }
                         .buttonStyle(.borderedProminent)
                         .disabled(!ringOnInterval)
+                        .accessibilityLabel("Start a random interval timer")
+                        .accessibilityHint("Press this button to start a timer that rings your chosen bell at random intervals.")
                         
                         Button {
                             soundModel.playSound(soundName: selectedSound.rawValue)
@@ -60,15 +64,12 @@ struct BellRingView: View {
                             Label("Regular inverval", systemImage: "arrow.trianglehead.clockwise")
                         }
                         .buttonStyle(.borderedProminent)
+                        .accessibilityLabel("Start a time with regular intervals")
+                        .accessibilityHint("Press this button to start a timer that rings your chosen bell at regular intervals.")
                     }
                     
                 }
                 .navigationTitle("Just a Bell Ring")
-            }
-        }
-        .onAppear {
-            Task {
-                model.updateRemaningSeconds()
             }
         }
     }
